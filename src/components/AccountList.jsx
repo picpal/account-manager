@@ -8,32 +8,48 @@ const AccountList = () => {
   const [dbManager, setDbManager] = useState(null);
 
   useEffect(() => {
-    setDbManager(new IndexedDBManager());
+    const indexedDBManager = new IndexedDBManager();
+    setDbManager(indexedDBManager);
+
+    const initializeDB = async () => {
+      try {
+        // 모든 데이터 가져오기
+        const data = await indexedDBManager.getAllData();
+        setAccounts(data);
+      } catch (error) {
+        console.error('Error initializing DB:', error);
+      }
+    };
+
+    initializeDB();
+    
+    // 컴포넌트가 언마운트될 때 데이터베이스를 닫을 수 있습니다.
+    return () => {
+      if (dbManager) {
+        dbManager.close();
+      }
+    };
   }, []);
 
-  useEffect(() => {
-    if (dbManager) {
-      dbManager.getData('accounts')?.then(data => {
-        if (data && data.length > 0) {
-          setAccounts(data);
-        } else {
-          console.log('계정 데이터가 존재하지 않습니다.');
-        }
-      });
-    }
-  }, [dbManager]);
 
   const copyToClipboard = (id, pw) => {
     navigator.clipboard.writeText(`ID: ${id} / PW: ${pw}`);
   };
 
   const deleteAccount = (id) => {
-    dbManager.deleteData('accounts', id);
+    dbManager.deleteData(id);
     setAccounts(accounts.filter(account => account.id !== id));
   };
 
+  // const updateAcoount = (id) => {
+  //   const newData = { name: 'Updated Name', age: 31 };
+  //   dbManager.updateData(id, ...newData);
+  // }
+
   const addAccount = () => {
-    setAccounts([...accounts, { id: '', pw: '', memo: '' }]);
+    const newData = { id: 'id', pw: 'password', memo: 'memo' };
+    setAccounts([...accounts, newData]); // accounts 배열에 새로운 데이터(newData)를 추가하여 업데이트합니다.
+    dbManager.addData(newData);
     setEditMode(true);
   };
 

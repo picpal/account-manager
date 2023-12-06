@@ -8,7 +8,7 @@ const AccountList = () => {
   const [dbManager, setDbManager] = useState(null);
 
   useEffect(() => {
-    const indexedDBManager = new IndexedDBManager();
+    const indexedDBManager = new IndexedDBManager('AccountList');
     setDbManager(indexedDBManager);
 
     const initializeDB = async () => {

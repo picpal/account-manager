@@ -1,106 +1,89 @@
 class IndexedDBManager {
-  constructor(dbName, storeName) {
+  constructor(storeName) {
     this.dbName = "bwc";
-    this.storeName = "account";
+    this.storeName = storeName;
+    this.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
     this.db = null;
+    this.connectToDB();
   }
 
-  // 데이터베이스를 열고 스토어를 생성합니다.
-  async openDatabase() {
-    return new Promise((resolve, reject) => {
-      const request = window.indexedDB.open(this.dbName, 1);
+  connectToDB() {
+    let request = this.indexedDB.open(this.dbName);
+    
+    request.onerror = function(event) {
+      console.error("connect error!!!!!!!")
+    };
 
-      request.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains(this.storeName)) {
-          db.createObjectStore(this.storeName, {
-            keyPath: "uuid",
-            autoIncrement: true,
-          });
+    request.onupgradeneeded = function(event) {
+      let db = event.target.result;
+      this.db = db;
+
+      db.createObjectStore(this.storeName, { keyPath: "uuid" });
+    };
+  }
+
+  saveData(data) {
+    let request = this.indexedDB.open(this.dbName);
+    request.onsuccess = function(event) {
+      let db = event.target.result;
+      let transaction = db.transaction([this.storeName], "readwrite");
+      let objectStore = transaction.objectStore(this.storeName);
+      objectStore.add(data);
+    };
+  }
+
+  deleteData(key) {
+    let request = this.indexedDB.open(this.dbName);
+    request.onsuccess = function(event) {
+      let db = event.target.result;
+      let transaction = db.transaction([this.storeName], "readwrite");
+      let objectStore = transaction.objectStore(this.storeName);
+      objectStore.delete(key);
+    };
+  }
+
+  getData(key) {
+    let request = this.indexedDB.open(this.dbName);
+    request.onsuccess = function(event) {
+      let db = event.target.result;
+      if(db.objectStoreNames.contains(this.storeName)) {
+        let transaction;
+        try {
+          transaction = db.transaction([this.storeName], "readonly");
+
+          if(!transaction){
+            console.log(transaction)
+            return "";
+          }
+
+
+          let objectStore = transaction.objectStore(this.storeName);
+          
+          let request = objectStore.get(key);
+          request.onsuccess = function(event) {
+            return event.target.result;
+          };
+        } catch (error) {
+          console.error("Failed to execute 'transaction' on 'IDBDatabase': One of the specified object stores was not found.");
+          return;
         }
-      };
-
-      request.onsuccess = (event) => {
-        this.db = event.target.result;
-        resolve(this.db);
-      };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
-    });
+      } else {
+        console.error("Object store not found");
+      }
+    };
   }
 
-  // 데이터를 추가합니다.
-  async addData(data) {
-    const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction([this.storeName], "readwrite");
-      const store = transaction.objectStore(this.storeName);
-      const request = store.add(data);
-
-      request.onsuccess = () => {
-        resolve(request.result);
+  updateData(key, data) {
+    let request = this.indexedDB.open(this.dbName);
+    request.onsuccess = function(event) {
+      let db = event.target.result;
+      let transaction = db.transaction([this.storeName], "readwrite");
+      let objectStore = transaction.objectStore(this.storeName);
+      let request = objectStore.put(data, key);
+      request.onsuccess = function(event) {
+        return event.target.result;
       };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
-    });
-  }
-
-  // 모든 데이터를 가져옵니다.
-  async getAllData() {
-    const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction([this.storeName], "readonly");
-      const store = transaction.objectStore(this.storeName);
-      const request = store.getAll();
-
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
-    });
-  }
-
-  // 데이터를 업데이트합니다.
-  async updateData(id, newData) {
-    const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction([this.storeName], "readwrite");
-      const store = transaction.objectStore(this.storeName);
-      const request = store.put({ id, ...newData });
-
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
-    });
-  }
-
-  // 데이터를 삭제합니다.
-  async deleteData(id) {
-    const db = await this.openDatabase();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction([this.storeName], "readwrite");
-      const store = transaction.objectStore(this.storeName);
-      const request = store.delete(id);
-
-      request.onsuccess = () => {
-        resolve(true);
-      };
-
-      request.onerror = (event) => {
-        reject(event.target.error);
-      };
-    });
+    };
   }
 }
 

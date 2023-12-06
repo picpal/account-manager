@@ -6,21 +6,21 @@ const InputPin = ({title = "Enter a new 6-digit PIN"}) => {
 
     useEffect(() => {
         document.getElementById('pin0').focus();
-        const indexedDBManager = new IndexedDBManager('Account');
+        const indexedDBManager = new IndexedDBManager('account');
         setDbManager(indexedDBManager);
-        }, []);
+    }, []);
 
     const handleInput = (index, value) => {
         if (value.match(/[0-9]/) && index < 5) {
-        document.getElementById(`pin${index + 1}`).focus();
+          document.getElementById(`pin${index + 1}`).focus();
         } else if (value.match(/[0-9]/) && index === 5) {
-        savePin();
+          savePin();
         }
     };
 
     const savePin = () => {
         const pinValue = Array.from({ length: 6 }).map((_, index) => document.getElementById(`pin${index}`).value).join('');
-        dbManager.saveData({pin_number:pinValue})
+        dbManager.saveData({pinNum:pinValue})
     };
 
   return (

@@ -6,7 +6,7 @@ import {vaildPassword} from '../utils/util'
 import Wrapper from './Wrapper';
 import InputPinDiffMsg from './InputPinDiffMsg';
 
-const InputPin = () => {
+const InputPin = ({setLogin}) => {
     const [dbManager, setDbManager] = useState(null);
     const [showMsg, setShowMsg] = useState(false);
     const navigate = useNavigate();
@@ -34,10 +34,12 @@ const InputPin = () => {
             if(!user){
                 dbManager.saveData("account",{uid:"user", pinNum:hashPin});
                 alert(`Don't Forget Password : [${pinValue}]`);
+                setLogin(true);
                 navigate("/list")
             }else{
                 if(vaildPassword(hashPin,user.pinNum)){
                     setShowMsg(false);
+                    setLogin(true);
                     navigate("/list")
                 }else{
                     setShowMsg(true);

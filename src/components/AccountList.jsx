@@ -16,7 +16,10 @@ const AccountList = ({login}) => {
     setDbManager(indexedDBManager);
 
     const accounts = indexedDBManager.getDataAll("accountList");
-    setAccounts(accounts);
+    accounts.then((res) => {
+      setAccounts(res);
+    })
+    
   }, []);
 
   const copyToClipboard = (id, pw) => {
@@ -46,7 +49,7 @@ const AccountList = ({login}) => {
         </div>
       ))}
       {
-        !accounts && <p>no data.</p>
+        accounts.length === 0 && <p>no data.</p>
       }
     </div>
   );

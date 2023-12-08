@@ -5,10 +5,15 @@ import {encryptSHA256} from '../encrypt/encrypt'
 import {vaildPassword} from '../utils/util'
 import Wrapper from './Wrapper';
 import InputPinDiffMsg from './InputPinDiffMsg';
+import { useRecoilState, useResetRecoilState } from "recoil";
+import { loginState } from "../state/atoms";
 
-const InputPin = ({setLogin}) => {
+const InputPin = () => {
     const [dbManager, setDbManager] = useState(null);
     const [showMsg, setShowMsg] = useState(false);
+    const [login, setLogin] = useRecoilState(loginState);
+    // const resetLogin = useResetRecoilState(loginState);
+
     const navigate = useNavigate();
 
     useEffect(() => {

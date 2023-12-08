@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import Button from './Button';
 import IndexedDBManager from '../api/IndexedDBManager';
+import { useRecoilValue } from "recoil";
+import { loginNextState } from "../state/selector";
 
-const AccountList = ({login}) => {
+const AccountList = () => {
   const [accounts, setAccounts] = useState([]); // 계정 데이터
   const [dbManager, setDbManager] = useState(null); // IDB object
+  const loginState = useRecoilValue(loginNextState);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!login) navigate("/"); // login 상태 체크
+    if(!loginState){
+      navigate("/"); // login 상태 체크
+    } 
 
     const indexedDBManager = new IndexedDBManager('accountList');
     setDbManager(indexedDBManager);

@@ -64,7 +64,7 @@ const InputPin = () => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper height='10'>
         <div className="flex items-center justify-center h-scree">
         <div className="p-8">
             <p className="text-xl font-bold text-center mb-4">PIN번호 6자리 입력</p>

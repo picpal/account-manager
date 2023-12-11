@@ -1,7 +1,8 @@
+import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import InputPin from "./components/InputPin";
-import AccountList from './components/AccountList';
-import { RecoilRoot } from 'recoil';
+import AccountList from "./components/AccountList";
+import { RecoilRoot } from "recoil";
 
 function App() {
   return (

@@ -59,7 +59,7 @@ class IndexedDBManager {
 
       const defaultData = {
         uid: getUid(),
-        date: getDate(),
+        regDate: getDate(),
       };
       const saveParams = { ...defaultData, ...data };
       const request = store.add(saveParams);

@@ -1,10 +1,14 @@
 import React from "react";
 
 const Wrapper = ({children,height}) => {
-  let wrapperCss = `w-96 h-[550px] m-auto relative z-30`;
+  
+  let wrapperCss = {
+    "550px" : "w-[400px] h-[550px] m-auto relative z-30 p-4" ,
+    "290px" : "w-[400px] h-[290px] m-auto relative z-30 p-4"
+  } 
 
   return (
-    <div className={wrapperCss}>
+    <div className={wrapperCss[height]}>
       {children}
     </div>
   );

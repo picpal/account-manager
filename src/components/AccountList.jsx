@@ -7,21 +7,23 @@ import { loginNextState } from "../state/selector";
 import AccountItem from './AccountItem';
 import AccountListHeader from './AccountListHeader';
 import AccountSearchBar from './AccountSearchBar';
+import { useRecoilState } from "recoil";
+import { accountsState , filterAccountsState} from "../state/atoms"
 
 const AccountList = () => {
-  const [accounts, setAccounts] = useState([]); // 계정 데이터
   const [dbManager, setDbManager] = useState(null); // IDB object
   const loginState = useRecoilValue(loginNextState);
+  const [accounts, setAccounts] = useRecoilState(accountsState);
+  const [filterAccounts, setFilterAccounts] = useRecoilState(filterAccountsState);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(false){
-    // if(!loginState){
-      navigate("/"); // login 상태 체크
+    if(!loginState){
+      navigate("/"); // pin 입력 화면으로 이동
     } 
 
-    const indexedDBManager = new IndexedDBManager('accountList');
+    const indexedDBManager = new IndexedDBManager();
     setDbManager(indexedDBManager);
 
     const accounts = indexedDBManager.getDataAll("accountList");
@@ -29,21 +31,24 @@ const AccountList = () => {
       // setAccounts(res);
     })
 
-
-    setAccounts([{
+    const fakeData = [{
       memo: "DB Safer",
       userId : "123456",
       userPw : "password",
-      regDate : "20230101",
-      accountStatus : "nomal"
-    },{
-      memo: "DB Safer",
-      userId : "123456",
       uid : "1",
       regDate : "20230101",
       accountStatus : "nomal"
-    }])
-    
+    },{
+      memo: "Hiware",
+      userId : "123456",
+      userPw : "password",
+      uid : "2",
+      regDate : "20230101",
+      accountStatus : "nomal"
+    }];
+
+    setAccounts(fakeData);
+    setFilterAccounts(fakeData);
   }, []);
 
   const copyToClipboard = (id, pw) => {
@@ -58,15 +63,15 @@ const AccountList = () => {
   };
 
   return (
-    <Wrapper height={"720px"}>
+    <Wrapper height={"550px"}>
       <AccountListHeader />
       <AccountSearchBar />
       <div className="w-full h-full overflow-auto">
-        {accounts.length > 0 && accounts.map((account, index) => {
+        {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
           return <AccountItem key={account.uid+index} idx={index+1} account={account}/>
         })}
         {
-          accounts.length === 0 && <p>no data.</p>
+          filterAccounts.length === 0 && <p>no data.</p>
         }
       </div>
     </Wrapper>

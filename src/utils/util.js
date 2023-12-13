@@ -1,7 +1,8 @@
 export function getDate(format) {
   const date = new Date();
   const year = String(date.getFullYear());
-  const month = String(date.getMonth());
+  const month = String(date.getMonth()+1);
+  const day = String(date.getDate());
 
   let result = "";
   switch (format) {
@@ -10,7 +11,7 @@ export function getDate(format) {
     case "YYYYMMDDhhmmssmm":
       break;
     default: // YYYYMMDD
-      result = year + month;
+      result = year + month + day;
       break;
   }
 
@@ -19,7 +20,7 @@ export function getDate(format) {
 
 export function getUid() {
   return (
-    getDate("YYYYMMDDhhmmssmm") + String(Math.round(Math.random() * 1000000))
+    getDate() + String(Math.round(Math.random() * 1000000))
   );
 }
 

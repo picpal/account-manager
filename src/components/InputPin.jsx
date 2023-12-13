@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import IndexedDBManager from '../api/IndexedDBManager';
 import {encryptSHA256} from '../encrypt/encrypt'
-import {vaildPassword} from '../utils/util'
+import {vaildPassword , generateRandomString} from '../utils/util'
 import Wrapper from './Wrapper';
 import InputPinDiffMsg from './InputPinDiffMsg';
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { loginState,helloState } from "../state/atoms";
+import { useRecoilState } from "recoil";
+import { loginState } from "../state/atoms";
 
 const InputPin = () => {
     const [dbManager, setDbManager] = useState(null);
     const [showMsg, setShowMsg] = useState(false);
     const [, setLogin] = useRecoilState(loginState);
-    const setHelloState = useSetRecoilState(helloState);
 
     const navigate = useNavigate();
 
@@ -34,11 +33,12 @@ const InputPin = () => {
     const checkPin = () => {
         const pinValue = Array.from({ length: 6 }).map((_, index) => document.getElementById(`pin${index}`).value).join('');
         const hashPin = encryptSHA256(pinValue);
+        const key = generateRandomString();
         
         dbManager.getData("account","user").then((user) => {
-            setHelloState(hashPin.toString().substring(0,20));
             if(!user){
-                dbManager.saveData("account",{uid:"user", pinNum:hashPin});
+                dbManager.clearDatabase('accountList');
+                dbManager.saveData("account",{uid:"user", pinNum:hashPin , key});
                 alert(`Don't Forget Password : [${pinValue}]`);
                 setLogin(true);
                 navigate("/list")

@@ -1,37 +1,72 @@
 import React, { useEffect, useState } from "react";
 import NewAccountPopupInput from "./NewAccountPopupInput";
 import IndexedDBManager from "../api/IndexedDBManager";
+import { encrypt } from "../encrypt/encrypt";
 import { useRecoilState } from "recoil";
-import { helloState } from "../state/atoms"
-import { decrypt, encrypt } from "../encrypt/encrypt";
+import { accountsState } from "../state/atoms"
+import {accountsNextStatus} from "../state/selector"
+
 
 const NewAccountPopup = ({setShowPopup}) => {
-  const [hello, ] = useRecoilState(helloState);
   const [dbManager, setDbManager] = useState(null);
+  const [accounts, setAccounts] = useRecoilState(accountsNextStatus);
 
   useEffect(() => {
       const connectDB = new IndexedDBManager();
       setDbManager(connectDB);
   }, []);
 
+  const processFormElements = (form, dbManager) => {
+    const elementPromises = Array.from(form.elements).map((input) => {
+      if (input.name) {
+        if (input.name === 'up' || input.name === 'upChk') {
+          return dbManager.getData("account", "user")
+            .then((res) => {
+              const value = encrypt(input.value, res.pinNum.substring(0, res.key.length));
+              return { name: input.name, value: value };
+            })
+            .catch((e) => {
+              console.error(e);
+              return { name: input.name, value: input.value };
+            });
+        } else {
+          return Promise.resolve({ name: input.name, value: input.value });
+        }
+      }
+      return Promise.resolve(null);
+    });
+  
+    // 모든 promises가 실행 될 때 까지 대기 후 진행
+    return Promise.all(elementPromises).then((elements) => {
+      const formData = {};
+      elements.forEach((element) => {
+        if (element) {
+          formData[element.name] = element.value;
+        }
+      });
+      return formData;
+    });
+  }
+  
   const saveClickHandler = () => {
     const form = document.forms['accountform'];
-    const formData = {};
-    Array.from(form.elements).forEach((input) => {
-      if (input.name) {
-        let value = input.value;
-        if(input.name === 'userPw' || input.name === 'userPwChk'){        
-          value = encrypt(value,hello);
-        }
-
-        formData[input.name] = value;
+    processFormElements(form, dbManager)
+    .then((formData) => {
+      if(formData){
+        dbManager.saveData("accountList",formData);
       }
+    })
+    .catch((error) => {
+      console.error('Error processing form:', error);
     });
 
-    if(formData){
-      dbManager.saveData("accountList",formData);
-    }
-
+    dbManager.getDataAll("accountList")
+    .then((res)=>{
+      setAccounts([...res]);
+    })
+    .catch((e)=>{
+      console.log(e);
+    });
     setShowPopup(false);
   }
   
@@ -45,7 +80,7 @@ const NewAccountPopup = ({setShowPopup}) => {
       </div>
       <div className="relative z-50 w-3/4 mx-auto mt-7 p-6 rounded-sm bg-white">
         <form name="accountform">
-          <NewAccountPopupInput name={"serviceName"} type={"text"} lebel={"서비스/프로그램 명"}/>
+          <NewAccountPopupInput name={"memo"} type={"text"} lebel={"서비스/프로그램 명"}/>
           <NewAccountPopupInput name={"ui"} type={"text"} lebel={"계정"}/>
           <NewAccountPopupInput name={"up"} type={"password"} lebel={"비밀번호"}/>
           <NewAccountPopupInput name={"upChk"} type={"password"} lebel={"비밀번호 확인"}/>

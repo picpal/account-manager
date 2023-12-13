@@ -2,7 +2,7 @@ import {useRef} from "react";
 import trash from "../assets/images/icon/Trash.png"
 import copySimple from "../assets/images/icon/CopySimple.png"
 
-const AccountItem = ({account,idx}) => {
+const AccountItem = ({idx,account}) => {
   const rowIdx = useRef();
 
   const {memo , userId , uid ,regDate} = account;

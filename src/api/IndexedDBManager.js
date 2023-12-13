@@ -3,7 +3,7 @@ import { getDate, getUid, deepCopy } from "../utils/util";
 class IndexedDBManager {
   constructor() {
     this.dbName = "bwc";
-    this.stores = ['account','accountList'];
+    this.stores = ["account", "accountList"];
     this.indexedDB =
       window.indexedDB ||
       window.mozIndexedDB ||
@@ -25,13 +25,13 @@ class IndexedDBManager {
     // DB 처음 생성될 때 여러개의 Store 생성. ( 버전이 같은 경우만 생성 가능 )
     request.onupgradeneeded = (e) => {
       const db = e.target.result;
-      this.stores.forEach(store => {
+      this.stores.forEach((store) => {
         db.createObjectStore(store, { keyPath: "uid" });
       });
     };
   }
 
-  saveData = (storeName , data) => {
+  saveData = (storeName, data) => {
     const dbRequest = this.indexedDB.open(this.dbName);
 
     // store가 존재하지 않는 경우 대비
@@ -76,13 +76,23 @@ class IndexedDBManager {
     };
   };
 
-  deleteData(storeName,key) {
+  deleteData(storeName, key) {
     let request = this.indexedDB.open(this.dbName);
     request.onsuccess = function (event) {
       let db = event.target.result;
       let transaction = db.transaction([storeName], "readwrite");
       let objectStore = transaction.objectStore(storeName);
       objectStore.delete(key);
+    };
+  }
+
+  clearDatabase(storeName) {
+    let request = this.indexedDB.open(this.dbName);
+    request.onsuccess = function (event) {
+      let db = event.target.result;
+      let transaction = db.transaction([storeName], "readwrite");
+      let objectStore = transaction.objectStore(storeName);
+      objectStore.clear();
     };
   }
 
@@ -117,8 +127,7 @@ class IndexedDBManager {
     });
   };
 
-  getData = (storeName ,key) => {
-
+  getData = (storeName, key) => {
     return new Promise((resolve, reject) => {
       let dbRequest = this.indexedDB.open(this.dbName);
       dbRequest.onsuccess = () => {
@@ -127,7 +136,7 @@ class IndexedDBManager {
           db.close();
           alert("old version Database. Please reload the page.");
         };
-        
+
         const transaction = db.transaction(storeName, "readonly");
         const store = transaction.objectStore(storeName);
         const request = store.get(key);
@@ -148,42 +157,41 @@ class IndexedDBManager {
     });
   };
 
-
-  updateData = (storeName, key,newValues) => {
+  updateData = (storeName, key, newValues) => {
     let dbRequest = this.indexedDB.open(this.dbName);
-  
+
     dbRequest.onupgradeneeded = () => {
       const db = dbRequest.result;
       if (!db.objectStoreNames.contains(storeName)) {
         db.createObjectStore(storeName, { keyPath: this.KEY_PATH });
       }
     };
-  
+
     dbRequest.onerror = (e) => {
       console.error(`indexedDB open Error : ${dbRequest.error}`);
     };
-  
+
     dbRequest.onsuccess = () => {
       const db = dbRequest.result;
-  
+
       db.onversionchange = () => {
         console.error("Database is outdated, please reload the page");
         db.close();
       };
-  
+
       const transaction = db.transaction([storeName], "readwrite");
       const store = transaction.objectStore(storeName);
       const request = store.get(key);
-  
+
       request.onerror = () => {
         console.error(request.error);
       };
-  
+
       request.onsuccess = () => {
         const data = { ...deepCopy(request.result), ...newValues };
-  
+
         const updateRequest = store.put(data);
-  
+
         updateRequest.onerror = (e) => {
           if (updateRequest.error.name === "ContranintError") {
             console.error(`ConstraintError : ${updateRequest.error}`);

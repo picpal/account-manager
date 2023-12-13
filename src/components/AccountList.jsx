@@ -11,9 +11,9 @@ import { useRecoilState } from "recoil";
 import { accountsState , filterAccountsState} from "../state/atoms"
 
 const AccountList = () => {
-  const [dbManager, setDbManager] = useState(null); // IDB object
+  const [, setDbManager] = useState(null); // IDB object
   const loginState = useRecoilValue(loginNextState);
-  const [accounts, setAccounts] = useRecoilState(accountsState);
+  const [,setAccounts] = useRecoilState(accountsState);
   const [filterAccounts, setFilterAccounts] = useRecoilState(filterAccountsState);
 
   const navigate = useNavigate();
@@ -28,39 +28,10 @@ const AccountList = () => {
 
     const accounts = indexedDBManager.getDataAll("accountList");
     accounts.then((res) => {
-      // setAccounts(res);
+      setAccounts(res);
+      setFilterAccounts(res);
     })
-
-    const fakeData = [{
-      memo: "DB Safer",
-      userId : "123456",
-      userPw : "password",
-      uid : "1",
-      regDate : "20230101",
-      accountStatus : "nomal"
-    },{
-      memo: "Hiware",
-      userId : "123456",
-      userPw : "password",
-      uid : "2",
-      regDate : "20230101",
-      accountStatus : "nomal"
-    }];
-
-    setAccounts(fakeData);
-    setFilterAccounts(fakeData);
   }, []);
-
-  const copyToClipboard = (id, pw) => {
-    navigator.clipboard.writeText(`ID: ${id} / PW: ${pw}`);
-  };
-
-  const deleteAccount = (key) => {
-    if (window.confirm("삭제 하시겠습니까?")) {
-      dbManager.deleteData("accountList", key);
-      setAccounts(accounts.filter(account => account.id !== key));
-    }
-  };
 
   return (
     <Wrapper height={"550px"}>
@@ -68,7 +39,7 @@ const AccountList = () => {
       <AccountSearchBar />
       <div className="w-full h-full overflow-auto">
         {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
-          return <AccountItem key={account.uid+index} idx={index+1} account={account}/>
+          return <AccountItem key={account.uid} idx={index+1} account={account}/>
         })}
         {
           filterAccounts.length === 0 && <p>no data.</p>

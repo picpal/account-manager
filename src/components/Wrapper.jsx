@@ -7,8 +7,10 @@ const Wrapper = ({children,height}) => {
     "290px" : "w-[400px] h-[290px] m-auto relative z-30 p-4"
   } 
 
+  const className = wrapperCss[height];
+
   return (
-    <div className={wrapperCss[height]}>
+    <div className={className}>
       {children}
     </div>
   );

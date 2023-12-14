@@ -22,6 +22,8 @@ export const accountsNextStatus = selector({
     return get(popupStatus);
   },
   set: ({ set, get }, newValue) => {
-    set(accountsNextStatus, [...newValue]);
+    const currentValue = get(accountsState);
+    const updatedValue = [...currentValue, ...newValue];
+    set(accountsState, updatedValue);
   },
 });

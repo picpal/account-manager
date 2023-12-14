@@ -3,13 +3,15 @@ import NewAccountPopupInput from "./NewAccountPopupInput";
 import IndexedDBManager from "../api/IndexedDBManager";
 import { encrypt } from "../encrypt/encrypt";
 import { useRecoilState } from "recoil";
-import { accountsState } from "../state/atoms"
+import { filterAccountsState } from "../state/atoms"
 import {accountsNextStatus} from "../state/selector"
+import { getUid } from "../utils/util";
+
 
 
 const NewAccountPopup = ({setShowPopup}) => {
   const [dbManager, setDbManager] = useState(null);
-  const [accounts, setAccounts] = useRecoilState(accountsNextStatus);
+  const [, setAccounts] = useRecoilState(accountsNextStatus);
 
   useEffect(() => {
       const connectDB = new IndexedDBManager();
@@ -44,6 +46,8 @@ const NewAccountPopup = ({setShowPopup}) => {
           formData[element.name] = element.value;
         }
       });
+
+      formData['uid'] = getUid(); // 원래 save할 때 default로 넣지만 상태관리 미숙으로 여기서 생성...
       return formData;
     });
   }
@@ -54,19 +58,17 @@ const NewAccountPopup = ({setShowPopup}) => {
     .then((formData) => {
       if(formData){
         dbManager.saveData("accountList",formData);
+
+        // save될때는 uid가 없는 formData가 들어가기 때문에 이걸로 상태를 변경하게 되면 UID가 없음
+        // 그래서 위에서 formData에서 uid를 넣음...
+        // 상태관리 구조를 다시 봐야함
+        setAccounts([formData]);
       }
     })
     .catch((error) => {
       console.error('Error processing form:', error);
     });
 
-    dbManager.getDataAll("accountList")
-    .then((res)=>{
-      setAccounts([...res]);
-    })
-    .catch((e)=>{
-      console.log(e);
-    });
     setShowPopup(false);
   }
   

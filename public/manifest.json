@@ -5,9 +5,23 @@
   "action": {
     "default_popup": "index.html",
     "default_icon": {
+
     }
   },
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["webRequest","scripting", "storage"],
   "icons": {
-  }
+
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["js/*.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "host_permissions" : [
+    "<all_urls>",
+    "http://*/*",
+    "https://*/*"
+  ]
+
 }

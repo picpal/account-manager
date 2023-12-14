@@ -21,7 +21,8 @@ const InputPin = () => {
         setDbManager(indexedDBManager);
     }, []);
 
-    const handleInput = (index, value) => {
+    const handleInput = (index, e) => {
+        const value = e.target.value;
         if (value.match(/[0-9]/) && index < 5) {
           document.getElementById(`pin${index + 1}`).focus();
         } else if (value.match(/[0-9]/) && index === 5) {
@@ -29,6 +30,12 @@ const InputPin = () => {
           document.getElementById(`pin${index}`).blur();
         }
     };
+
+    const handleKeyDown = (index,e) => {
+        if (e.key === 'Backspace') {
+          handleBackspace(index);
+        }
+      };
 
     const checkPin = () => {
         const pinValue = Array.from({ length: 6 }).map((_, index) => document.getElementById(`pin${index}`).value).join('');
@@ -77,12 +84,8 @@ const InputPin = () => {
                         className="w-10 h-10 border-2 rounded-lg border-gray-300 text-center text-xl mr-2 mb-2"
                         type="password"
                         maxLength="1"
-                        onChange={(e) => handleInput(index, e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Backspace') {
-                                handleBackspace(index);
-                            }
-                        }}
+                        onChange={(e) => handleInput(index, e)}
+                        onKeyDown={(e) => handleKeyDown(index, e)}
                         />
                     ))}
                 </div>

@@ -9,11 +9,12 @@ import AccountListHeader from './AccountListHeader';
 import AccountSearchBar from './AccountSearchBar';
 import { useRecoilState } from "recoil";
 import { accountsState , filterAccountsState} from "../state/atoms"
+import {accountsNextStatus} from "../state/selector"
 
 const AccountList = () => {
   const [, setDbManager] = useState(null); // IDB object
   const loginState = useRecoilValue(loginNextState);
-  const [,setAccounts] = useRecoilState(accountsState);
+  const [accounts,setAccounts] = useRecoilState(accountsState);
   const [filterAccounts, setFilterAccounts] = useRecoilState(filterAccountsState);
 
   const navigate = useNavigate();
@@ -33,16 +34,21 @@ const AccountList = () => {
     })
   }, []);
 
+  // 목록 변경 시 리렌더링을 위한 effect
+  useEffect(() => {
+    setFilterAccounts(accounts);
+  },[accounts]);
+
   return (
     <Wrapper height={"550px"}>
       <AccountListHeader />
       <AccountSearchBar />
-      <div className="w-full h-full overflow-auto">
+      <div className="w-full h-full overflow-auto" >
         {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
           return <AccountItem key={account.uid} idx={index+1} account={account}/>
         })}
         {
-          filterAccounts.length === 0 && <p>no data.</p>
+          filterAccounts.length === 0 && <p className='py-10 text-center'>no data.</p>
         }
       </div>
     </Wrapper>

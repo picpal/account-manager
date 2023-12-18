@@ -3,7 +3,6 @@ import NewAccountPopupInput from "./NewAccountPopupInput";
 import IndexedDBManager from "../api/IndexedDBManager";
 import { encrypt } from "../encrypt/encrypt";
 import { useRecoilState } from "recoil";
-import { filterAccountsState } from "../state/atoms"
 import {accountsNextStatus} from "../state/selector"
 import { getUid } from "../utils/util";
 

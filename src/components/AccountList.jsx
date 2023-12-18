@@ -9,7 +9,6 @@ import AccountListHeader from './AccountListHeader';
 import AccountSearchBar from './AccountSearchBar';
 import { useRecoilState } from "recoil";
 import { accountsState , filterAccountsState} from "../state/atoms"
-import {accountsNextStatus} from "../state/selector"
 
 const AccountList = () => {
   const [, setDbManager] = useState(null); // IDB object

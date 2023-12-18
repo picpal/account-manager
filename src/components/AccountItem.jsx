@@ -25,8 +25,8 @@ const AccountItem = ({idx,account}) => {
       </div>
 
       <div className="flex flex-row items-center gap-3">
-        <input type="button" data-uid={uid}><img src={trash}  alt="삭제 버튼" /></input>
-        <input type="button" data-uid={uid} ref={rowIdx}><img src={copySimple} alt="복사 버튼" /></input>
+        <button type="button" data-uid={uid}><img src={trash}  alt="삭제 버튼" /></button>
+        <button type="button" data-uid={uid} ref={rowIdx}><img src={copySimple} alt="복사 버튼" /></button>
       </div>
     </div>
   )

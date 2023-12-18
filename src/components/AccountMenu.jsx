@@ -16,9 +16,9 @@ const AccountMenu = ({showMenu}) => {
   const clickHandlerResetData = () => {
     alert('Reset Data');
   }
-// ${showMenu ? "" : "hidden"}
+// 
   return(
-    <div className="absolute top-10 z-40 p-4 border border-slate-100 rounded-md bg-white shadow-sm">
+    <div className={`${showMenu ? "" : "hidden"} absolute top-10 z-40 p-4 border border-slate-100 rounded-md bg-white shadow-sm`}>
       <ul className="text-sm flex flex-col gap-2">
         <li className="flex flex-row gap-2 items-center cursor-pointer" onClick={clickHandlerImportData}>
           <span><img src={UploadSimple} alt="upload File" /></span>

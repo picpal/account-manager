@@ -3,10 +3,12 @@ export function getDate(format) {
   const year = String(date.getFullYear());
   const month = String(date.getMonth() + 1);
   const day = String(date.getDate());
+  const time = String(date.getTime());
 
   let result = "";
   switch (format) {
     case "YYYYMMDDhhmmss":
+      result = year + month + day + time;
       break;
     case "YYYYMMDDhhmmssmm":
       break;
@@ -19,7 +21,9 @@ export function getDate(format) {
 }
 
 export function getUid() {
-  return getDate() + String(Math.round(Math.random() * 1000000));
+  return (
+    getDate("YYYYMMDDhhmmss") + String(Math.round(Math.random() * 1000000))
+  );
 }
 
 export function deepCopy(obj) {

@@ -1,9 +1,7 @@
-import {useRef} from "react";
 import trash from "../assets/images/icon/Trash.png"
 import copySimple from "../assets/images/icon/CopySimple.png"
 
-const AccountItem = ({idx,account}) => {
-  const rowIdx = useRef();
+const AccountItem = ({idx,account,removeBtnClickHandler,copyBtnClickHandler}) => {
 
   const {memo , ui , uid ,saveDate} = account;
   return (
@@ -25,8 +23,8 @@ const AccountItem = ({idx,account}) => {
       </div>
 
       <div className="flex flex-row items-center gap-3">
-        <button type="button" data-uid={uid}><img src={trash}  alt="삭제 버튼" /></button>
-        <button type="button" data-uid={uid} ref={rowIdx}><img src={copySimple} alt="복사 버튼" /></button>
+        <button type="button" onClick={removeBtnClickHandler} data-uid={uid}><img src={trash}  alt="삭제 버튼" /></button>
+        <button type="button" onClick={copyBtnClickHandler} data-uid={uid}><img src={copySimple} alt="복사 버튼" /></button>
       </div>
     </div>
   )

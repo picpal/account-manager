@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import NewAccountPopupInput from "./NewAccountPopupInput";
+import NewAccountPopupInput from "./UI/NewAccountPopupInput";
 import IndexedDBManager from "../api/IndexedDBManager";
 import { encrypt } from "../encrypt/encrypt";
 import { useRecoilState } from "recoil";
 import {accountsNextStatus} from "../state/selector"
 import { getUid } from "../utils/util";
-
-
 
 const NewAccountPopup = ({setShowPopup}) => {
   const [dbManager, setDbManager] = useState(null);
@@ -23,6 +21,7 @@ const NewAccountPopup = ({setShowPopup}) => {
         if (input.name === 'up' || input.name === 'upChk') {
           return dbManager.getData("account", "user")
             .then((res) => {
+              console.log(res.pinNum.substring(0, res.key.length))
               const value = encrypt(input.value, res.pinNum.substring(0, res.key.length));
               return { name: input.name, value: value };
             })

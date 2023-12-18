@@ -16,7 +16,7 @@ const AccountMenu = ({showMenu}) => {
   const clickHandlerResetData = () => {
     alert('Reset Data');
   }
-// 
+
   return(
     <div className={`${showMenu ? "" : "hidden"} absolute top-10 z-40 p-4 border border-slate-100 rounded-md bg-white shadow-sm`}>
       <ul className="text-sm flex flex-col gap-2">

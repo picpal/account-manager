@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import IndexedDBManager from '../api/IndexedDBManager';
 import {encryptSHA256} from '../encrypt/encrypt'
 import {vaildPassword , generateRandomString} from '../utils/util'
-import Wrapper from './Wrapper';
+import Wrapper from './UI/Wrapper';
 import InputPinDiffMsg from './InputPinDiffMsg';
 import { useRecoilState } from "recoil";
 import { loginState } from "../state/atoms";

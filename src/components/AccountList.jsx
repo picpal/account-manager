@@ -64,8 +64,7 @@ const AccountList = () => {
       <AccountSearchBar />
       <div className="w-full h-[400px] overflow-y-auto" >
         {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
-          return <AccountItem key={account.uid} 
-                              idx={index+1} 
+          return <AccountItem key={account.uid}
                               account={account} 
                               removeBtnClickHandler={removeBtnClickHandler} 
                               copyBtnClickHandler={copyBtnClickHandler}/>

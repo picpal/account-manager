@@ -1,53 +1,34 @@
 import trash from "../assets/images/icon/Trash.png"
 import copySimple from "../assets/images/icon/CopySimple.png"
-import LockKey from "../assets/images/icon/LockKey.png"
 
-const AccountItem = ({idx,account,removeBtnClickHandler,copyBtnClickHandler}) => {
+const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler}) => {
   const accountModClickHandler = (e) => {
     const uid = e.currentTarget.dataset.uid;
     alert("Modify Account Comming sooooon.. ");
   }
 
-  const getAccountStatus = (saveDate) => {
-    const currentDate = new Date();
-    const saveDateObj = new Date(saveDate);
-    let diffDays = Math.ceil((saveDateObj - currentDate) / (1000 * 3600 * 24));
-    
-    let accountStatusNm = "";
-    let accountStatusColor = "";
-    let backgroundColor = "";
+  const linkBtnClickHandler = (e) => {
+    alert('Location link Comming sooooooooon...');
+    // const url = e.currentTarget.dataset.url;
+    // window.location.href = url;
+    // url 이동 
+    // 클라이언트의 IP/PW 삽입
+  }
 
-    if (diffDays <= 15) {
-      accountStatusNm = "임박";
-      accountStatusColor = "text-red-500";
-      backgroundColor = "bg-red-100";
-    }else if (diffDays < 0) {
-      accountStatusNm = "만료";
-      accountStatusColor = "text-gray-500";
-      backgroundColor = "bg-gray-100";
-    }else{
-      accountStatusNm = "양호";
-      accountStatusColor = "text-lime-700";
-      backgroundColor = "bg-lime-100";
-  
+  const getLinkBtnColor = (url) => {
+    if(url && url !== ''){
+      return `text-lime-700 bg-lime-100 cursor-pointer`;
     }
-
-    return {
-      accountStatusNm,
-      accountStatusColor,
-      backgroundColor
-    }
+    return `text-gray-500 bg-gray-100 cursor-default`;
   }
 
   const {memo , ui , uid ,saveDate} = account;
-  const {accountStatusNm,accountStatusColor,backgroundColor} = getAccountStatus(saveDate);
-  
   return (
     <div className="flex flex-row gap-1 justify-between pl-2 pr-5 p-3 border-b border-b-slate-100 items-center">
       <div className="flex flex-row gap-5 items-center">
         <div>
           <div>
-            <span className={`text-xs px-2 py-1 ${backgroundColor} ${accountStatusColor} rounded-md`}>{accountStatusNm}</span>
+            <a onClick={linkBtnClickHandler} data-url={'url'} className={`text-xs px-2 py-1 ${getLinkBtnColor('url')} rounded-md`}>Link</a>
           </div>
         </div>
 

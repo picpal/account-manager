@@ -10,6 +10,7 @@ import AccountSearchBar from './AccountSearchBar';
 import { useRecoilState } from "recoil";
 import { accountsState , filterAccountsState} from "../state/atoms"
 import { decrypt } from '../encrypt/encrypt';
+import {isValidUrl} from '../utils/util'
 
 const AccountList = () => {
   const [dbManager, setDbManager] = useState(null); // IDB object
@@ -60,7 +61,7 @@ const AccountList = () => {
   // 링크 이동
   const linkBtnClickHandler = async (e) => {
     const {uid, url} = e.currentTarget.dataset;
-    if(!url) return;
+    if(!url || !uid || !isValidUrl(url)) return;
 
     const userInfo = await dbManager.getData("account", "user");
     const account = await dbManager.getData('accountList',uid);
@@ -80,8 +81,9 @@ const AccountList = () => {
   }
 
   // 계정 정보 수정
-  const accountModClickHandler = (e) => {
+  const accountModClickHandler = async (e) => {
     const uid = e.currentTarget.dataset.uid;
+    const account = await dbManager.getData('accountList',uid);
     alert("Modify Account Comming sooooon.. ");
   }
 
@@ -92,7 +94,8 @@ const AccountList = () => {
       <div className="w-full h-[400px] overflow-y-auto" >
         {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
           return <AccountItem key={account.uid}
-                              account={account} 
+                              account={account}
+                              accountModClickHandler={accountModClickHandler} 
                               linkBtnClickHandler={linkBtnClickHandler}
                               removeBtnClickHandler={removeBtnClickHandler} 
                               copyBtnClickHandler={copyBtnClickHandler}/>

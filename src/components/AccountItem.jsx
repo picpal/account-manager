@@ -1,17 +1,12 @@
 import trash from "../assets/images/icon/Trash.png"
 import copySimple from "../assets/images/icon/CopySimple.png"
 
-const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler}) => {
+const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler,linkBtnClickHandler}) => {
   const accountModClickHandler = (e) => {
     const uid = e.currentTarget.dataset.uid;
     alert("Modify Account Comming sooooon.. ");
   }
 
-  const linkBtnClickHandler = (e) => {
-    const url = e.currentTarget.dataset.url;
-    if(!url) return;
-
-  }
 
   const getLinkBtnColor = (url) => {
     if(url && url !== ''){
@@ -25,7 +20,7 @@ const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler}) => {
     <div className="flex flex-row gap-1 justify-between pl-2 pr-5 p-3 border-b border-b-slate-100 items-center">
       <div className="flex flex-row gap-5 items-center">
         <div>
-          <div onClick={linkBtnClickHandler} data-url={url}  className={`rounded-md leading-3 text-center py-1 px-2 ${getLinkBtnColor(url)}`}>
+          <div onClick={linkBtnClickHandler} data-url={url} data-uid={uid} className={`rounded-md leading-3 text-center py-1 px-2 ${getLinkBtnColor(url)}`}>
             <span className="text-xs">Move</span>
             <br />
             <span className="text-xs">URL</span>

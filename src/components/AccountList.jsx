@@ -57,6 +57,21 @@ const AccountList = () => {
     navigator.clipboard.writeText(decrypt(account.up, userInfo.pinNum.substring(0, userInfo.key.length)))
   }
 
+  // 링크 이동
+  const linkBtnClickHandler = async (e) => {
+    const {uid, url} = e.currentTarget.dataset;
+    if(!url) return;
+
+    // !!!!!!!! 여기 부터 수정!!!!!!!!!!!
+    const linkData = await dbManager.getData('accountList',uid);
+    console.log(linkData);
+
+
+
+    // 페이지 이동 및 값 전달 요청
+    window.chrome.runtime.sendMessage({action: "navigateAndSend", url: url, value: 'goooood!!!!!!'});
+  }
+
 
   return (
     <Wrapper height={"570px"}>
@@ -66,6 +81,7 @@ const AccountList = () => {
         {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
           return <AccountItem key={account.uid}
                               account={account} 
+                              linkBtnClickHandler={linkBtnClickHandler}
                               removeBtnClickHandler={removeBtnClickHandler} 
                               copyBtnClickHandler={copyBtnClickHandler}/>
         })}

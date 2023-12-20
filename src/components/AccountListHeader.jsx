@@ -34,12 +34,12 @@ const AccountListHeader = () => {
   return (
     <>
       <div className="flex flex-row justify-between items-center pt-4 pb-4 relative top-0 z-40">
-        <div className="flex flex-row gap-3 items-center">
+        <div className="flex flex-row gap-4 items-center">
           <div ref={menuRef} className="cursor-pointer hover:opacity-70" onClick={handleMenuButtonClick}>
             <img className="w-7" src={menuImage} alt="메뉴" />
           </div>
           <div>
-            <h1 className="text-xl text-gray-700">My Account List</h1>
+            <h1 className="text-xl text-gray-700 cursor-default">My Account List</h1>
           </div>
         </div>
         <div className="cursor-pointer hover:opacity-70" onClick={handleAddButtonClick}>

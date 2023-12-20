@@ -75,7 +75,7 @@ const InputPin = () => {
     <Wrapper height='290px'>
         <div className="flex items-center justify-center h-scree">
             <div className="p-8">
-                <p className="text-xl font-bold text-center mb-4">PIN번호 6자리 입력</p>
+                <p className="text-xl font-bold text-center mb-4 cursor-default">PIN번호 6자리 입력</p>
                 <div className="flex flex-wrap justify-between mb-2 mt-6">
                     {Array.from({ length: 6 }).map((_, index) => (
                         <input
@@ -92,7 +92,7 @@ const InputPin = () => {
                 <div className="mb-4">
                     {showMsg && <InputPinDiffMsg />}
                 </div>
-                <button className="w-full py-3 bg-gray-300 text-gray-700 font-bold rounded hover:bg-gray-400 focus:outline-none focus:shadow-outline">
+                <button className="w-full py-3 text-lg bg-gray-300 text-gray-700 font-bold rounded hover:bg-gray-400 focus:outline-none focus:shadow-outline">
                     CANCEL
                 </button>
             </div>

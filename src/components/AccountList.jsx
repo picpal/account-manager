@@ -62,7 +62,7 @@ const AccountList = () => {
     <Wrapper height={"550px"}>
       <AccountListHeader />
       <AccountSearchBar />
-      <div className="w-full h-full overflow-auto" >
+      <div className="w-full h-[400px] overflow-y-auto" >
         {filterAccounts.length > 0 && filterAccounts.map((account, index) => {
           return <AccountItem key={account.uid} 
                               idx={index+1} 
@@ -71,7 +71,7 @@ const AccountList = () => {
                               copyBtnClickHandler={copyBtnClickHandler}/>
         })}
         {
-          filterAccounts.length === 0 && <p className='py-10 text-center'>no data.</p>
+          filterAccounts.length === 0 && <p className='py-10 text-center text-lg'>No Account Data.</p>
         }
       </div>
     </Wrapper>

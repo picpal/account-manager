@@ -1,13 +1,7 @@
 import trash from "../assets/images/icon/Trash.png"
 import copySimple from "../assets/images/icon/CopySimple.png"
 
-const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler,linkBtnClickHandler}) => {
-  const accountModClickHandler = (e) => {
-    const uid = e.currentTarget.dataset.uid;
-    alert("Modify Account Comming sooooon.. ");
-  }
-
-
+const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler,linkBtnClickHandler,accountModClickHandler}) => {
   const getLinkBtnColor = (url) => {
     if(url && url !== ''){
       return `text-blue-700 bg-blue-100 cursor-pointer`;

@@ -21,7 +21,6 @@ const NewAccountPopup = ({setShowPopup}) => {
         if (input.name === 'up' || input.name === 'upChk') {
           return dbManager.getData("account", "user")
             .then((res) => {
-              console.log(res.pinNum.substring(0, res.key.length))
               const value = encrypt(input.value, res.pinNum.substring(0, res.key.length));
               return { name: input.name, value: value };
             })

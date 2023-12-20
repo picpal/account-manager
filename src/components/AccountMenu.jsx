@@ -6,8 +6,6 @@ import IndexedDBManager from '../api/IndexedDBManager';
 import { useRecoilState } from "recoil";
 import { accountsState } from "../state/atoms"
 
-
-
 const AccountMenu = ({showMenu}) => {
   const [ ,setAccounts] = useRecoilState(accountsState);
   const [dbManager , setDbManager] = useState();
@@ -36,7 +34,7 @@ const AccountMenu = ({showMenu}) => {
     // 트리거
     a.click();
 
-    // 다운로드 후 a 태그를 제거하고, Blob URL을 해제합니다.
+    // 다운로드 후 a 태그를 제거하고, Blob URL을 해제
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }

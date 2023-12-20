@@ -62,16 +62,28 @@ const AccountList = () => {
     const {uid, url} = e.currentTarget.dataset;
     if(!url) return;
 
-    // !!!!!!!! 여기 부터 수정!!!!!!!!!!!
-    const linkData = await dbManager.getData('accountList',uid);
-    console.log(linkData);
-
-
+    const userInfo = await dbManager.getData("account", "user");
+    const account = await dbManager.getData('accountList',uid);
+    const linkData = [
+      {
+        tag : ["mgrId"],
+        value : account.ui
+      },
+      {
+        tag : ["ecpyPwd"],
+        value : decrypt(account.up, userInfo.pinNum.substring(0, userInfo.key.length))
+      }
+    ]
 
     // 페이지 이동 및 값 전달 요청
-    window.chrome.runtime.sendMessage({action: "navigateAndSend", url: url, value: 'goooood!!!!!!'});
+    window.chrome.runtime.sendMessage({action: "navigateAndSend", url: url, value: linkData});
   }
 
+  // 계정 정보 수정
+  const accountModClickHandler = (e) => {
+    const uid = e.currentTarget.dataset.uid;
+    alert("Modify Account Comming sooooon.. ");
+  }
 
   return (
     <Wrapper height={"570px"}>

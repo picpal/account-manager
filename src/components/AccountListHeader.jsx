@@ -33,17 +33,17 @@ const AccountListHeader = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center pt-4 pb-4 relative top-0 z-50">
+      <div className="flex flex-row justify-between items-center pt-4 pb-4 relative top-0 z-40">
         <div className="flex flex-row gap-3 items-center">
           <div ref={menuRef} className="cursor-pointer hover:opacity-70" onClick={handleMenuButtonClick}>
-            <img src={menuImage} alt="메뉴" />
+            <img className="w-7" src={menuImage} alt="메뉴" />
           </div>
           <div>
-            <h1>My Account List</h1>
+            <h1 className="text-xl text-gray-700">My Account List</h1>
           </div>
         </div>
         <div className="cursor-pointer hover:opacity-70" onClick={handleAddButtonClick}>
-          <img src={PlusCircle} alt="목록 추가 버튼" />
+          <img className="w-6" src={PlusCircle} alt="목록 추가 버튼" />
         </div>
 
         <AccountMenu showMenu={showMenu} />

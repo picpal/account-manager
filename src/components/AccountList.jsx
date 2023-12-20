@@ -59,7 +59,7 @@ const AccountList = () => {
 
 
   return (
-    <Wrapper height={"550px"}>
+    <Wrapper height={"570px"}>
       <AccountListHeader />
       <AccountSearchBar />
       <div className="w-full h-[400px] overflow-y-auto" >

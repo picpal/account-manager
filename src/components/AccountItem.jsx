@@ -8,27 +8,27 @@ const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler}) => {
   }
 
   const linkBtnClickHandler = (e) => {
-    alert('Location link Comming sooooooooon...');
-    // const url = e.currentTarget.dataset.url;
-    // window.location.href = url;
-    // url 이동 
-    // 클라이언트의 IP/PW 삽입
+    const url = e.currentTarget.dataset.url;
+    if(!url) return;
+
   }
 
   const getLinkBtnColor = (url) => {
     if(url && url !== ''){
-      return `text-lime-700 bg-lime-100 cursor-pointer`;
+      return `text-blue-700 bg-blue-100 cursor-pointer`;
     }
     return `text-gray-500 bg-gray-100 cursor-default`;
   }
 
-  const {memo , ui , uid ,saveDate} = account;
+  const {memo , ui , uid ,saveDate,url} = account;
   return (
     <div className="flex flex-row gap-1 justify-between pl-2 pr-5 p-3 border-b border-b-slate-100 items-center">
       <div className="flex flex-row gap-5 items-center">
         <div>
-          <div>
-            <a onClick={linkBtnClickHandler} data-url={'url'} className={`text-xs px-2 py-1 ${getLinkBtnColor('url')} rounded-md`}>Link</a>
+          <div onClick={linkBtnClickHandler} data-url={url}  className={`rounded-md leading-3 text-center py-1 px-2 ${getLinkBtnColor(url)}`}>
+            <span className="text-xs">Move</span>
+            <br />
+            <span className="text-xs">URL</span>
           </div>
         </div>
 

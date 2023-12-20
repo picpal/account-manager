@@ -3,7 +3,7 @@ import React from "react";
 const Wrapper = ({children,height}) => {
   
   let wrapperCss = {
-    "550px" : "w-[400px] h-[550px] m-auto relative z-30 py-4 px-6 overflow-hidden" ,
+    "570px" : "w-[400px] h-[570px] m-auto relative z-30 py-4 px-6 overflow-hidden" ,
     "290px" : "w-[400px] h-[290px] m-auto relative z-30 py-4 px-6 overflow-hidden"
   } 
 

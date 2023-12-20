@@ -100,6 +100,7 @@ const NewAccountPopup = ({setShowPopup}) => {
       <div className="relative w-3/4 mx-auto mt-7 p-7 rounded-md bg-white">
         <form name="accountform">
           <NewAccountPopupInput name={"memo"} type={"text"} lebel={"서비스/프로그램 명"}/>
+          <NewAccountPopupInput name={"url"} type={"text"} lebel={"서비스 URL"}/>
           <NewAccountPopupInput name={"ui"} type={"text"} lebel={"계정"}/>
           <NewAccountPopupInput name={"up"} type={"password"} lebel={"비밀번호"}/>
           <NewAccountPopupInput name={"upChk"} type={"password"} lebel={"비밀번호 확인"}/>

@@ -34,7 +34,7 @@ const AccountList = () => {
       setAccounts(res);
       setFilterAccounts(res);
     })
-    
+
   }, []);
 
   // 목록 변경 시 리렌더링을 위한 effect
@@ -69,11 +69,11 @@ const AccountList = () => {
     const account = await dbManager.getData('accountList',uid);
     const linkData = [
       {
-        tag : ["mgrId"],
+        tag : ["mgrId","username" , "j_username","id"],
         value : account.ui
       },
       {
-        tag : ["ecpyPwd"],
+        tag : ["ecpyPwd","password" , "j_password"],
         value : decrypt(account.up, userInfo.pinNum.substring(0, userInfo.key.length))
       }
     ]

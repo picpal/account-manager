@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import menuImage from '../assets/images/icon/menu.png';
 import PlusCircle from '../assets/images/icon/PlusCircle.png';
 import AccountMenu from "./AccountMenu";
-import NewAccountPopup from "./NewAccountPopup";
-
+import AccountInputPopup from "./AccountInputPopup";
+import { useRecoilState } from "recoil";
+import { showPopupState } from "../state/atoms";
 
 const AccountListHeader = () => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useRecoilState(showPopupState);
   const [showMenu , setShowMenu] = useState(false);
 	const menuRef = useRef(null); 	// Ref 디폴트값 null로 지정
 
@@ -24,7 +25,9 @@ const AccountListHeader = () => {
   }, [menuRef]);
 
   const handleAddButtonClick = () => {
-    setShowPopup(true);
+    setShowPopup((pre)=>{
+      return {...pre , ...{mode:"new" , show:true}}
+    });
   }
 
   const handleMenuButtonClick = () => {
@@ -49,7 +52,7 @@ const AccountListHeader = () => {
         <AccountMenu showMenu={showMenu} />
       </div>
 
-      {showPopup && <NewAccountPopup setShowPopup={setShowPopup}/>}
+      {showPopup.show && <AccountInputPopup />}
     </>
   )
 }

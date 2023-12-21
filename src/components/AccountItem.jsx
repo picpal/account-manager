@@ -4,9 +4,9 @@ import copySimple from "../assets/images/icon/CopySimple.png"
 const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler,linkBtnClickHandler,accountModClickHandler}) => {
   const getLinkBtnColor = (url) => {
     if(url && url !== ''){
-      return `text-blue-700 bg-blue-100 cursor-pointer`;
+      return `border-blue-200 text-blue-700 bg-blue-100 cursor-pointer`;
     }
-    return `text-gray-500 bg-gray-100 cursor-default`;
+    return `border-gray-200 text-gray-500 bg-gray-100 cursor-default`;
   }
 
   const {memo , ui , uid ,saveDate,url} = account;
@@ -14,7 +14,7 @@ const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler,linkBtnC
     <div className="flex flex-row gap-1 justify-between pl-2 pr-5 p-3 border-b border-b-slate-100 items-center">
       <div className="flex flex-row gap-5 items-center">
         <div>
-          <div onClick={linkBtnClickHandler} data-url={url} data-uid={uid} className={`rounded-md leading-3 text-center py-1 px-2 ${getLinkBtnColor(url)}`}>
+          <div onClick={linkBtnClickHandler} data-url={url} data-uid={uid} className={`rounded-md  leading-3 text-center py-1 px-2 ${getLinkBtnColor(url)}`}>
             <span className="text-xs">Move</span>
             <br />
             <span className="text-xs">URL</span>

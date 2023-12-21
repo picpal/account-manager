@@ -1,19 +1,53 @@
 import React, { useEffect, useState } from "react";
-import NewAccountPopupInput from "./UI/NewAccountPopupInput";
+import AccountPopupInput from "./UI/AccountPopupInput";
 import IndexedDBManager from "../api/IndexedDBManager";
-import { encrypt } from "../encrypt/encrypt";
+import { decrypt, encrypt } from "../encrypt/encrypt";
 import { useRecoilState } from "recoil";
+import { showPopupState } from "../state/atoms";
 import {accountsNextStatus} from "../state/selector"
 import { getUid } from "../utils/util";
 
-const NewAccountPopup = ({setShowPopup}) => {
+
+
+const AccountInputPopup = () => {
+  const [values, setValues] = useState({ memo : "", saveDate : "", ui : "", uid : "", up : "", url : "" });
   const [dbManager, setDbManager] = useState(null);
   const [, setAccounts] = useRecoilState(accountsNextStatus);
+  const [showPopup, setShowPopup] = useRecoilState(showPopupState);
 
   useEffect(() => {
       const connectDB = new IndexedDBManager();
       setDbManager(connectDB);
   }, []);
+
+
+  useEffect(() => {
+    if (!showPopup.uid || !dbManager) return;
+    
+    if(showPopup.mode === 'fix'){
+      dbManager.getData('accountList', showPopup.uid)
+      .then((account)=>{
+        dbManager.getData("account", "user")
+        .then((userInfo)=>{
+          const newValues = {...account , ...{
+            up : decrypt(account.up, userInfo.pinNum.substring(0, userInfo.key.length)),
+            upChk : decrypt(account.upChk, userInfo.pinNum.substring(0, userInfo.key.length))
+          }}
+  
+          setValues((pre)=>{
+              return {...pre , ...newValues}
+          });
+        })
+        .catch((e)=>{
+          console.log(e)
+        });
+      })
+      .catch((e)=>{
+        console.error(e);
+      })
+    }
+
+  }, [showPopup.show,dbManager]);
 
   const processFormElements = (form, dbManager) => {
     const elementPromises = Array.from(form.elements).map((input) => {
@@ -44,7 +78,6 @@ const NewAccountPopup = ({setShowPopup}) => {
         }
       });
 
-      formData['uid'] = getUid(); // 원래 save할 때 default로 넣지만 상태관리 미숙으로 여기서 생성...
       return formData;
     });
   }
@@ -73,23 +106,34 @@ const NewAccountPopup = ({setShowPopup}) => {
     processFormElements(form, dbManager)
     .then((formData) => {
       if(formData){
-        // 데이터 저장
-        dbManager.saveData("accountList",formData);
-        // save될때는 uid가 없는 formData가 들어가기 때문에 이걸로 상태를 변경하게 되면 UID가 없음
-        // 그래서 위에서 formData에서 uid를 넣음...
-        // 상태관리 구조를 다시 봐야함
-        setAccounts([formData]);
+        if(showPopup.mode === "fix"){
+          dbManager.updateData("accountList",showPopup.uid,formData);
+        }else{
+          dbManager.saveData("accountList",formData);
+        }
+
+        dbManager.getDataAll("accountList")
+        .then((res)=>{
+          setAccounts(res);
+        })
+        .catch((e)=>{
+          console.error(e)
+        });
       }
     })
     .catch((error) => {
       console.error('Error processing form:', error);
     });
 
-    setShowPopup(false);
+    setShowPopup(pre => {
+      return {...pre, ...{uid: "", mode:"new" , show:false}};
+    });
   }
   
   const cancelClickHandler = () => {
-    setShowPopup(false);
+    setShowPopup(pre => {
+      return {...pre, ...{uid: "", mode:"new" , show:false}};
+    });
   }
 
   return (
@@ -98,12 +142,12 @@ const NewAccountPopup = ({setShowPopup}) => {
       </div>
       <div className="relative w-3/4 mx-auto mt-7 p-7 rounded-md bg-white">
         <form name="accountform">
-          <NewAccountPopupInput name={"memo"} type={"text"} lebel={"서비스/프로그램 명"}/>
-          <NewAccountPopupInput name={"url"} type={"text"} lebel={"서비스 URL"}/>
-          <NewAccountPopupInput name={"ui"} type={"text"} lebel={"계정"}/>
-          <NewAccountPopupInput name={"up"} type={"password"} lebel={"비밀번호"}/>
-          <NewAccountPopupInput name={"upChk"} type={"password"} lebel={"비밀번호 확인"}/>
-          <NewAccountPopupInput name={"saveDate"} type={"date"} lebel={"비밀번호 변경일자"}/>
+          <AccountPopupInput name={"memo"} value={values.memo} type={"text"} lebel={"서비스/프로그램 명"}/>
+          <AccountPopupInput name={"url"} value={values.url} type={"text"} lebel={"서비스 URL"}/>
+          <AccountPopupInput name={"ui"} value={values.ui} type={"text"} lebel={"계정"}/>
+          <AccountPopupInput name={"up"} value={values.up} type={"password"} lebel={"비밀번호"}/>
+          <AccountPopupInput name={"upChk"} value={values.upChk} type={"password"} lebel={"비밀번호 확인"}/>
+          <AccountPopupInput name={"saveDate"} mode={showPopup.mode} value={values.saveDate} type={"date"} lebel={"비밀번호 변경일자"}/>
           
           <div className="mt-3 text-sm flex flex-row gap-3 align-middle justify-end">
             <div onClick={saveClickHandler} className="px-4 py-1 rounded-md bg-lime-700 text-white cursor-pointer hover:opacity-70">저장</div>
@@ -114,4 +158,4 @@ const NewAccountPopup = ({setShowPopup}) => {
     </div>
   )
 }
-export default NewAccountPopup;
+export default AccountInputPopup;

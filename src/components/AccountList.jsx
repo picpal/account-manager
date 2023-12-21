@@ -8,7 +8,7 @@ import AccountItem from './AccountItem';
 import AccountListHeader from './AccountListHeader';
 import AccountSearchBar from './AccountSearchBar';
 import { useRecoilState } from "recoil";
-import { accountsState , filterAccountsState} from "../state/atoms"
+import { accountsState , filterAccountsState ,showPopupState} from "../state/atoms"
 import { decrypt } from '../encrypt/encrypt';
 import {isValidUrl} from '../utils/util'
 
@@ -17,6 +17,7 @@ const AccountList = () => {
   const loginState = useRecoilValue(loginNextState);
   const [accounts,setAccounts] = useRecoilState(accountsState);
   const [filterAccounts, setFilterAccounts] = useRecoilState(filterAccountsState);
+  const [,setShowPopup] = useRecoilState(showPopupState);
 
   const navigate = useNavigate();
 
@@ -33,6 +34,7 @@ const AccountList = () => {
       setAccounts(res);
       setFilterAccounts(res);
     })
+    
   }, []);
 
   // 목록 변경 시 리렌더링을 위한 effect
@@ -83,8 +85,11 @@ const AccountList = () => {
   // 계정 정보 수정
   const accountModClickHandler = async (e) => {
     const uid = e.currentTarget.dataset.uid;
-    const account = await dbManager.getData('accountList',uid);
-    alert("Modify Account Comming sooooon.. ");
+    
+    if(!uid) return;
+    // const account = await dbManager.getData('accountList',uid);
+
+    setShowPopup({mode:'fix',show:true,uid});
   }
 
   return (

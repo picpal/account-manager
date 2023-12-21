@@ -5,10 +5,10 @@ export const loginState = atom({
   default: false, // default value (aka initial value)
 });
 
-export const popupStatus = atom({
-  key: "popupStatus", // unique ID (with respect to other atoms/selectors)
-  default: false, // default value (aka initial value)
-});
+export const showPopupState = atom({
+  key: "showPopupState", // unique ID (with respect to other atoms/selectors)
+  default: {mode:'new',show:false,uid:''}, // default value (aka initial value)
+})
 
 export const accountsState = atom({
   key: "accountsState", // unique ID (with respect to other atoms/selectors)

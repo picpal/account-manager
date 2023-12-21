@@ -1,6 +1,6 @@
 // selectors.js
 import { selector } from "recoil";
-import { loginState, popupStatus, accountsState } from "./atoms";
+import { loginState, accountsState } from "./atoms";
 
 export const loginNextState = selector({
   key: "loginNextState",
@@ -9,21 +9,16 @@ export const loginNextState = selector({
   },
 });
 
-export const popupNextStatus = selector({
-  key: "popupNextStatus",
-  get: ({ get }) => {
-    return get(popupStatus);
-  },
-});
-
 export const accountsNextStatus = selector({
   key: "accountsNextStatus",
   get: ({ get }) => {
-    return get(popupStatus);
+    return get(accountsState);
   },
   set: ({ set, get }, newValue) => {
-    const currentValue = get(accountsState);
-    const updatedValue = [...currentValue, ...newValue];
-    set(accountsState, updatedValue);
+    // const currentValue = get(accountsState);
+    // console.log(currentValue);
+    // console.log(newValue)
+    // const updatedValue = [...currentValue, ...newValue];
+    set(accountsState, newValue);
   },
 });

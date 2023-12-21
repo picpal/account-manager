@@ -1,6 +1,9 @@
 import React from "react";
-const NewAccountPopupInput = ({name,lebel,type}) => {
-  const defaultValue = type === "date" ? new Date().toISOString().split('T')[0] : "";
+const AccountPopupInput = ({name,lebel,type,value,mode="new"}) => {
+  let defaultValue = value;
+  if(mode === 'new' && type === "date"){
+    defaultValue = new Date().toISOString().split('T')[0];
+  }
 
   return (
     <div className="py-1">
@@ -12,4 +15,4 @@ const NewAccountPopupInput = ({name,lebel,type}) => {
   )
 }
 
-export default NewAccountPopupInput;
+export default AccountPopupInput;

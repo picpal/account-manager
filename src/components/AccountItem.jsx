@@ -4,7 +4,7 @@ import copySimple from "../assets/images/icon/CopySimple.png"
 const AccountItem = ({account,removeBtnClickHandler,copyBtnClickHandler,linkBtnClickHandler,accountModClickHandler}) => {
   const getLinkBtnColor = (url) => {
     if(url && url !== ''){
-      return `border-blue-200 text-blue-700 bg-blue-100 cursor-pointer`;
+      return `border-blue-200 text-blue-700 bg-blue-100 cursor-pointer hover:opaticy-0.7`;
     }
     return `border-gray-200 text-gray-500 bg-gray-100 cursor-default`;
   }

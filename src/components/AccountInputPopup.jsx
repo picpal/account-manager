@@ -5,7 +5,6 @@ import { decrypt, encrypt } from "../encrypt/encrypt";
 import { useRecoilState } from "recoil";
 import { showPopupState } from "../state/atoms";
 import {accountsNextStatus} from "../state/selector"
-import { getUid } from "../utils/util";
 
 
 
@@ -97,8 +96,8 @@ const AccountInputPopup = () => {
 
     return true;
   }
-  
-  const saveClickHandler = () => {
+
+  const saveData = () => {
     const form = document.forms['accountform'];
 
     if(!validateParams()) return;
@@ -116,8 +115,8 @@ const AccountInputPopup = () => {
         .then((res)=>{
           setAccounts(res);
         })
-        .catch((e)=>{
-          console.error(e)
+        .catch((err)=>{
+          console.error(err)
         });
       }
     })
@@ -128,6 +127,17 @@ const AccountInputPopup = () => {
     setShowPopup(pre => {
       return {...pre, ...{uid: "", mode:"new" , show:false}};
     });
+  }
+
+  const saveKeypressHandler = (e) =>{
+
+    if(e.key === 'Enter'){
+      saveData();
+    }
+  }
+  
+  const saveClickHandler = () => {
+    saveData();
   }
   
   const cancelClickHandler = () => {
@@ -142,16 +152,16 @@ const AccountInputPopup = () => {
       </div>
       <div className="relative w-3/4 mx-auto mt-7 p-7 rounded-md bg-white">
         <form name="accountform">
-          <AccountPopupInput name={"memo"} value={values.memo} type={"text"} lebel={"서비스/프로그램 명"}/>
-          <AccountPopupInput name={"url"} value={values.url} type={"text"} lebel={"서비스 URL"}/>
-          <AccountPopupInput name={"ui"} value={values.ui} type={"text"} lebel={"계정"}/>
-          <AccountPopupInput name={"up"} value={values.up} type={"password"} lebel={"비밀번호"}/>
-          <AccountPopupInput name={"upChk"} value={values.upChk} type={"password"} lebel={"비밀번호 확인"}/>
-          <AccountPopupInput name={"saveDate"} mode={showPopup.mode} value={values.saveDate} type={"date"} lebel={"비밀번호 변경일자"}/>
+          <AccountPopupInput saveKeypressHandler={saveKeypressHandler} name={"memo"} value={values.memo} type={"text"} lebel={"서비스/프로그램 명"}/>
+          <AccountPopupInput saveKeypressHandler={saveKeypressHandler} name={"url"} value={values.url} type={"text"} lebel={"서비스 URL"}/>
+          <AccountPopupInput saveKeypressHandler={saveKeypressHandler} name={"ui"} value={values.ui} type={"text"} lebel={"계정"}/>
+          <AccountPopupInput saveKeypressHandler={saveKeypressHandler} name={"up"} value={values.up} type={"password"} lebel={"비밀번호"}/>
+          <AccountPopupInput saveKeypressHandler={saveKeypressHandler} name={"upChk"} value={values.upChk} type={"password"} lebel={"비밀번호 확인"}/>
+          <AccountPopupInput saveKeypressHandler={saveKeypressHandler} name={"saveDate"} mode={showPopup.mode} value={values.saveDate} type={"date"} lebel={"비밀번호 변경일자"}/>
           
-          <div className="mt-3 text-sm flex flex-row gap-3 align-middle justify-end">
-            <div onClick={saveClickHandler} className="px-4 py-1 rounded-md bg-lime-700 text-white cursor-pointer hover:opacity-70">저장</div>
-            <div onClick={cancelClickHandler} className="px-4 py-1 rounded-md bg-red-700 text-white cursor-pointer hover:opacity-70">취소</div>
+          <div className="mt-3 mx-auto w-fit text-sm flex flex-row gap-3 align-middle justify-end ">
+            <div onClick={saveClickHandler} className="px-5 py-2 rounded-md bg-green-500 text-white cursor-pointer hover:opacity-70">저장</div>
+            <div onClick={cancelClickHandler} className="px-5 py-2 rounded-md bg-red-500 text-white cursor-pointer hover:opacity-70">취소</div>
           </div>
         </form>
       </div>

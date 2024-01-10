@@ -72,7 +72,7 @@ const InputPin = () => {
   };
 
   return (
-    <Wrapper height='290px'>
+    <Wrapper height='205px'>
         <div className="flex items-center justify-center h-scree">
             <div className="p-8">
                 <p className="text-xl font-bold text-center mb-4 cursor-default">PIN번호 6자리 입력</p>
@@ -92,9 +92,6 @@ const InputPin = () => {
                 <div className="mb-4">
                     {showMsg && <InputPinDiffMsg />}
                 </div>
-                <button className="w-full py-3 text-lg bg-gray-300 text-gray-700 font-bold rounded hover:bg-gray-400 focus:outline-none focus:shadow-outline">
-                    CANCEL
-                </button>
             </div>
         </div>
     </Wrapper>

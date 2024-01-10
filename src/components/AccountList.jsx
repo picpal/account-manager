@@ -20,7 +20,7 @@ const AccountList = () => {
   const [,setShowPopup] = useRecoilState(showPopupState);
 
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     if(!loginState){
       navigate("/"); // pin 입력 화면으로 이동
@@ -35,12 +35,33 @@ const AccountList = () => {
       setFilterAccounts(res);
     })
 
+   
   }, []);
 
   // 목록 변경 시 리렌더링을 위한 effect
   useEffect(() => {
     setFilterAccounts(accounts);
   },[accounts]);
+
+  useEffect(() => {
+    console.log(`filterAccounts : uesEffect`)
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  },[filterAccounts]);
+
+  const handleKeyPress = (event) => {
+    if(!event.key) return;
+    
+    const eventKeys = Array.from({ length: 9 }, (_, i) => (i + 1).toString());
+    if (eventKeys.includes(event.key) && event.altKey) {
+      if(filterAccounts[Number(event.key)-1]){
+        const {uid , url} = filterAccounts[Number(event.key)-1];
+        moveUrl(uid, url);
+      }
+    }
+  };
 
   // 삭제
   const removeBtnClickHandler = (e) => {
@@ -60,9 +81,7 @@ const AccountList = () => {
     navigator.clipboard.writeText(decrypt(account.up, userInfo.pinNum.substring(0, userInfo.key.length)))
   }
 
-  // 링크 이동
-  const linkBtnClickHandler = async (e) => {
-    const {uid, url} = e.currentTarget.dataset;
+  const moveUrl = async (uid, url) => {
     if(!url || !uid || !isValidUrl(url)) return;
 
     const userInfo = await dbManager.getData("account", "user");
@@ -80,6 +99,12 @@ const AccountList = () => {
 
     // 페이지 이동 및 값 전달 요청
     window.chrome.runtime.sendMessage({action: "navigateAndSend", url: url, value: linkData});
+  }
+
+  // 링크 클릭 이벤트
+  const linkBtnClickHandler = async (e) => {
+    const {uid, url} = e.currentTarget.dataset;
+    await moveUrl(uid, url);
   }
 
   // 계정 정보 수정

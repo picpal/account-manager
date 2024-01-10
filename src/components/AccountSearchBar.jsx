@@ -30,7 +30,7 @@ const AccountSearchBar = () => {
         <div className="absolute top-3 left-3">
           <img src={magnifyingGlass} alt="찾기 이미지" />
         </div>
-        <input ref={serchInput} onChange={inputOnchangeHandler} className="bg-gray-100 rounded-md py-2 pl-9 pr-3 w-full text-base" type="text"  placeholder="Search for Account Memo"/>
+        <input ref={serchInput} onChange={inputOnchangeHandler} className="bg-gray-100 rounded-lg py-2 pl-9 pr-3 w-full text-base" type="text"  placeholder="Search for Account Memo"/>
       </div>
     </div>
   )
